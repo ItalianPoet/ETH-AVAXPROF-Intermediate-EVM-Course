@@ -1,0 +1,37 @@
+pragma solidity ^0.8.0;
+
+contract ExampleContract {
+    address public owner;
+    uint256 public balance;
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    // Function to deposit Ether into the contract
+    function deposit() public payable {
+        require(msg.value > 0, "Deposit amount must be greater than 0");
+        balance += msg.value;
+    }
+
+    // Function to withdraw Ether from the contract
+    function withdraw(uint256 amount) public {
+        require(msg.sender == owner, "Only the owner can withdraw funds");
+        require(amount <= balance, "Insufficient balance");
+
+        balance -= amount;
+        payable(msg.sender).transfer(amount);
+    }
+
+    // Function to demonstrate assert statement
+    function checkBalance() public view {
+        // This assert statement will never fail
+        assert(balance >= 0);
+    }
+
+    // Function to demonstrate revert statement
+    function causeRevert() public pure {
+        // This function will always revert with the given error message
+        revert("This is a forced revert");
+    }
+}
